@@ -112,7 +112,7 @@
                     <classesDirectory>target/classes/</classesDirectory>
                     <archive>
                         <manifest>
-                            <mainClass>com.antfact.twitter.TwitterApplication</mainClass>
+                            <mainClass>com.antfact.transit.TwitterApplication</mainClass>
                             <!-- 打包时 MANIFEST.MF文件不记录的时间戳版本 -->
                             <useUniqueVersions>false</useUniqueVersions>
                             <addClasspath>true</addClasspath>
