@@ -1,9 +1,10 @@
 package com.antfact.transit.bean;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 
-public class PostData {
+public class PostData implements Serializable {
     private byte[] source;
     private  String data;
 

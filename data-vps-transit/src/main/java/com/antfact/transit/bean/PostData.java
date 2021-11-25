@@ -1,9 +1,10 @@
 package com.antfact.transit.bean;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 
-public class TwitterPostData {
+public class PostData implements Serializable {
     private byte[] source;
     private  String data;
 
@@ -25,15 +26,15 @@ public class TwitterPostData {
 
     @Override
     public String toString() {
-        return "TwitterPostData{" +
+        return "PostData{" +
             "source=" + Arrays.toString(source) +
             ", data='" + data + '\'' +
             '}';
     }
-    public TwitterPostData(){
+    public PostData(){
 
     }
-    public TwitterPostData(byte[] source, String data) {
+    public PostData(byte[] source, String data) {
         this.source = source;
         this.data = data;
     }

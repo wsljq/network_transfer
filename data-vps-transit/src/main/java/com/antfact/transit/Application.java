@@ -8,10 +8,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableAsync
 @EnableScheduling
-public class TwitterApplication {
+public class Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(TwitterApplication.class, args);
+        SpringApplication.run(Application.class, args);
     }
 
 }

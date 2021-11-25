@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.antfact</groupId>
-    <artifactId>data</artifactId>
+    <artifactId>data-vps-transit</artifactId>
     <version>0.0.1</version>
     <name>data</name>
     <description>Demo project for Spring Boot</description>
@@ -112,7 +112,7 @@
                     <classesDirectory>target/classes/</classesDirectory>
                     <archive>
                         <manifest>
-                            <mainClass>com.antfact.transit.TwitterApplication</mainClass>
+                            <mainClass>com.antfact.transit.Application</mainClass>
                             <!-- 打包时 MANIFEST.MF文件不记录的时间戳版本 -->
                             <useUniqueVersions>false</useUniqueVersions>
                             <addClasspath>true</addClasspath>

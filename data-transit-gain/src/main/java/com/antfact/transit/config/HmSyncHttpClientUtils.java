@@ -61,7 +61,7 @@ public class HmSyncHttpClientUtils {
     private static int connectTimeout = 5000;// 建立连接超时时间
     private static int socketTimeout = 5000;// 设置等待数据超时时间5秒钟 根据业务调整
     private static int maxTotal = 100;// 连接池最大连接数
-    private static int maxPerRoute = 10;// 每个主机的并发
+    private static int maxPerRoute = 20;// 每个主机的并发
     private static int maxRoute = 50;// 目标主机的最大连接数
     private static CloseableHttpClient httpClient = null;
     private final static Object syncLock = new Object();// 相当于线程锁,用于线程安全
@@ -315,6 +315,40 @@ public class HmSyncHttpClientUtils {
         }
         return null;
     }
+    private static void  httpMethod(final String url, final HttpPost httpBase) {
+        CloseableHttpResponse response = null;
+        HttpEntity entity = null;
+        boolean isProxy = Boolean.parseBoolean(PropertiesUtil.getProperty("isOpenAgen"));
+        if (isProxy) {
+            String proxyStr = AgentList.getAgent();
+            String[] proxys = proxyStr.split(":");
+            HttpHost proxy = new HttpHost(proxys[0], Integer.parseInt(proxys[1]));
+            RequestConfig requestConfig = RequestConfig.custom().setProxy(proxy).build();
+            httpBase.setConfig(requestConfig);
+        }
+        try {
+            final RequestConfig requestConfig = RequestConfig.custom()
+                                                             .setConnectionRequestTimeout(HmSyncHttpClientUtils.connectPoolTimeout)// 设定从连接池获取可用连接的时间
+                                                             .setConnectTimeout(HmSyncHttpClientUtils.connectTimeout)// 设定连接服务器超时时间
+                                                             .setSocketTimeout(HmSyncHttpClientUtils.socketTimeout)// 设定获取数据的超时时间
+                                                             .build();
+            httpBase.setConfig(requestConfig);
+            response = HmSyncHttpClientUtils.getHttpClient(url).execute(httpBase, HttpClientContext.create());
+            entity = response.getEntity();
+        } catch (final Exception e) {
+            log.info("连接异常：{}",url,e);
+        }finally {
+            try {
+                // 关闭HttpEntity的流，如果手动关闭了InputStream in = entity.getContent();这个流，也可以不调用这个方法
+                EntityUtils.consume(entity);
+                if (response != null) {
+                    response.close();
+                }
+            } catch (final Exception e) {
+                log.info("httpClient连接关闭异常：{}",url,e);
+            }
+        }
+    }
     private static List<PostData>  httpMethod(
         final HttpPost httpBase,
         final String url) {
@@ -338,7 +372,7 @@ public class HmSyncHttpClientUtils {
             response = HmSyncHttpClientUtils.getHttpClient(url).execute(httpBase, HttpClientContext.create());
             entity = response.getEntity();
             byte[] bytes = EntityUtils.toByteArray(entity);
-            if (bytes == null) {
+            if (bytes == null || bytes.length==0) {
                 return null;
             }
             List<PostData> postDataList = (ArrayList<PostData>) GodSerializer.deSerialize(bytes);
@@ -439,6 +473,10 @@ public class HmSyncHttpClientUtils {
      */
     public static List<PostData> httpPost(final  HttpPost httpPost , final String url) {
         return HmSyncHttpClientUtils.httpMethod(httpPost, url);
+    }
+
+    public static void httpPost(final String url,final  HttpPost httpPost) {
+        HmSyncHttpClientUtils.httpMethod(url,httpPost);
     }
     /**
      * 模拟HTTPPOST提交

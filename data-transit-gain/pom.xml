@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.antfact</groupId>
-    <artifactId>data</artifactId>
+    <artifactId>data-transit-gain</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>data</name>
     <description>Demo project for Spring Boot</description>
@@ -62,14 +62,6 @@
             <artifactId>httpclient</artifactId>
             <version>4.5</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>camel-core</groupId>-->
-<!--            <artifactId>camel-core</artifactId>-->
-<!--            <version>2.23.1</version>-->
-<!--            <scope>system</scope>-->
-<!--            <systemPath>${project.basedir}/lib/camel-core-2.23.1.jar</systemPath>-->
-<!--            <optional>true</optional>-->
-<!--        </dependency>-->
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -92,19 +84,6 @@
             <artifactId>httpcore</artifactId>
             <version>4.4.13</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.twitter4j</groupId>-->
-<!--            <artifactId>twitter4j-core</artifactId>-->
-<!--            <version>4.0.7</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>twitter4j1</groupId>-->
-<!--            <artifactId>twitter4j1</artifactId>-->
-<!--            <version>1.0</version>-->
-<!--            <scope>system</scope>-->
-<!--            <systemPath>${project.basedir}/lib/twitter4j1-1.0.jar</systemPath>-->
-<!--            <optional>true</optional>-->
-<!--        </dependency>-->
         <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients -->
         <dependency>
             <groupId>org.apache.kafka</groupId>
@@ -149,9 +128,6 @@
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
                         </manifest>
-<!--                        <manifestEntries>-->
-<!--                            <Class-Path>lib/twitter4j1-1.0.jar</Class-Path>-->
-<!--                        </manifestEntries>-->
                     </archive>
                 </configuration>
             </plugin>

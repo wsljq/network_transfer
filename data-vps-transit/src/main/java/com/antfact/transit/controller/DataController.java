@@ -1,6 +1,6 @@
 package com.antfact.transit.controller;
 
-import com.antfact.transit.bean.TwitterPostData;
+import com.antfact.transit.bean.PostData;
 import com.antfact.transit.job.Statistics;
 import com.antfact.transit.job.controllerLog;
 import com.antfact.transit.job.vpsLog;
@@ -55,22 +55,23 @@ public class DataController {
                         @RequestPart(name = "source", required = false) byte[] sourceCodeBin
                        ) {
         try {
-            TwitterPostData twitterPostData = new TwitterPostData(sourceCodeBin, taskInfo);
-            transitService.setQueue(twitterPostData);
+            PostData postData = new PostData(sourceCodeBin, taskInfo);
+            transitService.setQueue(postData);
             vpsLog.add(1);
         } catch (Throwable e) {
             log.error("接收异常", e);
         }
     }
+
     @RequestMapping("/index")
     @ResponseBody
     public String transit(ServletRequest request, HttpServletResponse response) {
-        Map<String,Object> map = WebUtils.getParametersStartingWith(request, "");
-        for(Map.Entry<String,Object> entry:map.entrySet()){
-            if( entry.getValue() instanceof String){
-                System.out.println(entry.getKey()+"--->"+entry.getValue());
-            } else if( entry.getValue() instanceof Byte){
-                System.out.println(entry.getKey()+"---> 是byte类型");
+        Map<String, Object> map = WebUtils.getParametersStartingWith(request, "");
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            if (entry.getValue() instanceof String) {
+                System.out.println(entry.getKey() + "--->" + entry.getValue());
+            } else if (entry.getValue() instanceof Byte) {
+                System.out.println(entry.getKey() + "---> 是byte类型");
             }
         }
 //        if (queue.size() == queueSize) {
@@ -113,20 +114,25 @@ public class DataController {
     @ResponseBody
     public void transit(HttpServletResponse response) {
         response.setContentType("application/octet-stream");
-        List<TwitterPostData> list = new ArrayList<>();
+        List<PostData> list = new ArrayList<>();
         try {
-            for (int i = 0; i < 50; i++) {
-                TwitterPostData twitterPostData = (TwitterPostData) queue.poll();
-                if (twitterPostData != null) {
+            for (int i = 0; i < 3; i++) {
+                PostData postData = (PostData) queue.poll();
+                if (postData != null) {
                     Statistics.add(1);
-                    list.add(twitterPostData);
+                    list.add(postData);
                 } else {
 //                    log.info("取数据未到最大值，实际：" + (i + 1));
                     controllerLog.add((i + 1));
                     break;
                 }
             }
-            if(list.size()==50) controllerLog.add();
+            if (list.size() == 3) {
+                controllerLog.add();
+            }
+            if (list.size() == 0) {
+                return;
+            }
             byte[] bytes = GodSerializer.serialize(list);
             OutputStream out = response.getOutputStream();
             out.write(bytes);
@@ -161,6 +167,44 @@ public class DataController {
             }
         } catch (InterruptedException e) {
             log.error("获取中断异常", e);
+        } catch (IOException e) {
+            log.error("IO流异常", e);
+        } finally {
+            if (stream != null) {
+                try {
+                    stream.close();
+                } catch (IOException e) {
+                    log.error("IO流关闭异常", e);
+                }
+            }
+        }
+    }
+
+
+    /**
+     * 国内公司访问此方法，接收数据放入队列里
+     *
+     * @param ckSzie   数据包大小
+     * @param response
+     */
+    @RequestMapping("/ants/ant/test/postdata")
+    @ResponseBody
+    public void speed(Integer ckSzie, HttpServletResponse response) {
+        ByteArrayInputStream stream = null;
+//        response.setContentType("image/gif");
+        StringBuilder sb1 = new StringBuilder();
+        for (int i = 0; i < 1024 * 1024 * ckSzie; i++) {
+            sb1.append('a');
+        }
+        String str = sb1.toString();
+
+        try {
+            OutputStream out = response.getOutputStream();
+            stream = new ByteArrayInputStream(str.getBytes());
+            byte[] b = new byte[stream.available()];
+            stream.read(b);
+            out.write(b);
+            out.flush();
         } catch (IOException e) {
             log.error("IO流异常", e);
         } finally {

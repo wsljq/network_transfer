@@ -16,7 +16,7 @@ public class BlockingQueueBean {
 
     @Bean
     public BlockingQueue queue(){
-        BlockingQueue<TwitterPostData> queue=new ArrayBlockingQueue<TwitterPostData>(queueSize);
+        BlockingQueue<PostData> queue=new ArrayBlockingQueue<PostData>(queueSize);
         return queue;
     }
 }

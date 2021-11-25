@@ -69,18 +69,18 @@
             <DefaultRolloverStrategy max="8"/>
         </RollingFile>
 
-        <RollingFile name="twitterCollectFile" fileName="${FILE_PATH}/twitter.log" append="true"
-                     filePattern="${FILE_PATH}/${FILE_NAME}-twitter-%d{yyyy-MM-dd}_%i.log">
-            <PatternLayout pattern="${LOG_PATTERN}"  charset="UTF-8"/>
+<!--        <RollingFile name="twitterCollectFile" fileName="${FILE_PATH}/twitter.log" append="true"-->
+<!--                     filePattern="${FILE_PATH}/${FILE_NAME}-twitter-%d{yyyy-MM-dd}_%i.log">-->
+<!--            <PatternLayout pattern="${LOG_PATTERN}"  charset="UTF-8"/>-->
 
-            <Policies>
-                <SizeBasedTriggeringPolicy size="10MB"/>
-                <!-- 每天凌晨0点  匹配的所有文件在10天或更长时间内将在翻滚时间删除。-->
-                <TimeBasedTriggeringPolicy interval="1"/>
-<!--                <CronTriggeringPolicy schedule="0 0 0 * * ?"/>-->
-            </Policies>
-            <DefaultRolloverStrategy max="8"/>
-        </RollingFile>
+<!--            <Policies>-->
+<!--                <SizeBasedTriggeringPolicy size="10MB"/>-->
+<!--                &lt;!&ndash; 每天凌晨0点  匹配的所有文件在10天或更长时间内将在翻滚时间删除。&ndash;&gt;-->
+<!--                <TimeBasedTriggeringPolicy interval="1"/>-->
+<!--&lt;!&ndash;                <CronTriggeringPolicy schedule="0 0 0 * * ?"/>&ndash;&gt;-->
+<!--            </Policies>-->
+<!--            <DefaultRolloverStrategy max="8"/>-->
+<!--        </RollingFile>-->
 
     </appenders>
 
@@ -93,9 +93,9 @@
             <AppenderRef ref="Console"/>
         </logger>
         <!--将logger中的 additivity 属性配置为 false，则这个logger不会将日志流反馈到root中。-->
-        <Logger name="twitterCollectCodeLogger" additivity="true" level="INFO">
-            <appender-ref ref="twitterCollectFile" level="INFO" />
-        </Logger>
+<!--        <Logger name="twitterCollectCodeLogger" additivity="true" level="INFO">-->
+<!--            <appender-ref ref="twitterCollectFile" level="INFO" />-->
+<!--        </Logger>-->
         <!--监控系统信息-->
         <!--若是additivity设为false，则 子Logger 只会在自己的appender里输出，而不会在 父Logger 的appender里输出。-->
         <Logger name="org.springframework" level="info" additivity="false">
